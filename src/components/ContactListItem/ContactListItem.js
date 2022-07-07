@@ -8,13 +8,7 @@ export default function ContactListItem({ contact }) {
 
     const handleClick = (id, name) => {
         deleteContact(id);
-        toast.success(`Contact ${name} is successfully deleted!`, {
-            style: {
-                borderRadius: '10px',
-                background: '#333',
-                color: '#fff',
-            },
-        });
+        toast.success(`Contact ${name} is successfully deleted!`);
     };
 
     return (
