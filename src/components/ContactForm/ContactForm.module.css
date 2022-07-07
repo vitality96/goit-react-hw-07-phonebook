@@ -40,4 +40,5 @@ align-items: center;
     appearance: none;
     display: inline-block;
     line-height: initial;
+    cursor: pointer;
 }

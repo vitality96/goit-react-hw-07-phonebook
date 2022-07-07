@@ -1,19 +1,18 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { nanoid } from 'nanoid';
-import { useDispatch, useSelector } from 'react-redux';
-import { add } from '../../redux/ContactsSlice';
+import toast from 'react-hot-toast';
+import { useGetAllContactsQuery, useCreateContactMutation } from "service/contactsAPI";
 import s from './ContactForm.module.css';
 
 export default function ContactForm() {
-    const dispatch = useDispatch();
-    const contacts = useSelector(state => state.items)
-
     const [name, setName] = useState("");
     const [number, setNumber] = useState("")
 
-
     const nameId = nanoid();
     const phoneId = nanoid();
+
+    const { data } = useGetAllContactsQuery();
+    const [addContact, {isLoading}] = useCreateContactMutation();
 
     const handleChangeName = (evt) => {
         setName(evt.target.value);
@@ -28,21 +27,13 @@ export default function ContactForm() {
         setNumber("");
     };
 
-
-    const addContact = ({ name, number }) => {
-        const newContact = { id: nanoid(), name, number };
-        const checkUser = contacts.find(
-            contact => contact.name.toLowerCase() === newContact.name.toLowerCase()
-        );
-
-        checkUser
-            ? alert(`${name} is already in the contacts`)
-            : dispatch(add({ name, number, id: nanoid() }));
-    };
-
-    const handleSubmit = (evt) => {
-        evt.preventDefault();
-        addContact({name, number});
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        if (data?.find(contact => contact.name.toLowerCase() === name.toLowerCase())) {
+            return toast.error(`${name} is already in Contacts List!`);
+        }
+        await addContact({ name, number });
+        toast.success(`Contact ${name} has been successfully added!`)
         reset();
     };
 
@@ -76,7 +67,7 @@ export default function ContactForm() {
                     required
                 />
             </label>
-            <button className={s.button} type="submit">Add contact</button>
+            {!isLoading && <button className={s.button} type="submit">Add contact</button>}
         </form>
     );
 };
