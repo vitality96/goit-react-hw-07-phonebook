@@ -12,7 +12,14 @@ export default function ContactForm() {
     const phoneId = nanoid();
 
     const { data } = useGetAllContactsQuery();
-    const [addContact, {isLoading}] = useCreateContactMutation();
+    const [addContact, { isLoading, isSuccess }] = useCreateContactMutation();
+    
+    const isOnSuccess = () => {
+        if (addContact !== isSuccess) {
+            toast.success(`Contact ${name} has been successfully added!`)
+            reset();
+        }
+    }
 
     const handleChangeName = (evt) => {
         setName(evt.target.value);
@@ -27,15 +34,15 @@ export default function ContactForm() {
         setNumber("");
     };
 
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (data?.find(contact => contact.name.toLowerCase() === name.toLowerCase())) {
             return toast.error(`${name} is already in Contacts List!`);
         }
         await addContact({ name, number });
-        toast.success(`Contact ${name} has been successfully added!`)
-        reset();
-    };
+        isOnSuccess();
+    }
 
     return (
         <form className={s.form} onSubmit={handleSubmit}>

@@ -4,12 +4,19 @@ import s from './ContactListItem.module.css'
 
 export default function ContactListItem({ contact }) {
     const { name, phone, id } = contact;
-    const [deleteContact, { isLoading }] = useDeleteContactMutation();
+    const [deleteContact, { isLoading, isSuccess }] = useDeleteContactMutation();
 
-    const handleClick = (id, name) => {
+    const isOnDelete = () => {
+        if (deleteContact !== isSuccess) {
         deleteContact(id);
         toast.success(`Contact ${name} is successfully deleted!`);
+        }
+    }
+
+    const handleClick = (id, name) => {
+        isOnDelete(id, name)
     };
+
 
     return (
         <>
