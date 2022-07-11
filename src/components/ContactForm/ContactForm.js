@@ -19,7 +19,7 @@ export default function ContactForm() {
             toast.success(`Contact ${name} has been successfully added!`)
             reset();
         }
-    }, [isSuccess]);
+    }, [isSuccess, name]);
 
     const handleChangeName = (evt) => {
         setName(evt.target.value);
