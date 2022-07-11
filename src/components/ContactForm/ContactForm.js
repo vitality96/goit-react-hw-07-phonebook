@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { nanoid } from 'nanoid';
 import toast from 'react-hot-toast';
 import { useGetAllContactsQuery, useCreateContactMutation } from "service/contactsAPI";
@@ -14,12 +14,12 @@ export default function ContactForm() {
     const { data } = useGetAllContactsQuery();
     const [addContact, { isLoading, isSuccess }] = useCreateContactMutation();
     
-    const isOnSuccess = () => {
-        if (addContact !== isSuccess) {
+    useEffect(() => {
+        if (isSuccess) {
             toast.success(`Contact ${name} has been successfully added!`)
             reset();
         }
-    }
+    }, [isSuccess]);
 
     const handleChangeName = (evt) => {
         setName(evt.target.value);
@@ -35,13 +35,12 @@ export default function ContactForm() {
     };
 
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = event => {
         event.preventDefault();
         if (data?.find(contact => contact.name.toLowerCase() === name.toLowerCase())) {
             return toast.error(`${name} is already in Contacts List!`);
         }
-        await addContact({ name, number });
-        isOnSuccess();
+        addContact({ name, number });
     }
 
     return (
