@@ -10,9 +10,9 @@ export default function ContactListItem({ contact }) {
 
     useEffect(() => {
         if (isSuccess) {
-            toast.success(`Contact ${name} is successfully deleted!`);
+            toast.success(`Contact is successfully deleted!`);
         }
-    }, [deleteContact, id, isSuccess, name])
+    }, [deleteContact, id, isSuccess])
 
     const handleClick = (id) => {
         deleteContact(id);

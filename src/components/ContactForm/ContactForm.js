@@ -16,10 +16,10 @@ export default function ContactForm() {
     
     useEffect(() => {
         if (isSuccess) {
-            toast.success(`Contact ${name} has been successfully added!`)
+            toast.success(`Contact has been successfully added!`)
             reset();
         }
-    }, [isSuccess, name]);
+    }, [isSuccess]);
 
     const handleChangeName = (evt) => {
         setName(evt.target.value);
